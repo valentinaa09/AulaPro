@@ -1,0 +1,553 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>AulaPro — Aprende, comparte y crece con tecnología</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F5F7FA; --card:#FFFFFF; --text:#0f1724; --muted:#6B7280;
+    --az1:#1A73E8; --az2:#2EA3FF; --acc:#6C63FF;
+    --glass: rgba(255,255,255,0.65); --shadow: 0 10px 30px rgba(20,40,80,0.06);
+  }
+  [data-theme="dark"]{
+    --bg:#071023; --card:#0f1724; --text:#E6EEF8; --muted:#9FB0C7;
+    --az1:#2EA3FF; --az2:#1A73E8; --acc:#8B81FF;
+    --glass: rgba(255,255,255,0.03); --shadow: 0 18px 40px rgba(0,0,0,0.6);
+  }
+
+  *{box-sizing:border-box}
+  body{margin:0;font-family:"Open Sans",system-ui,Arial;background:linear-gradient(180deg,var(--bg),#e9f2ff);color:var(--text);-webkit-font-smoothing:antialiased}
+  .container{max-width:1150px;margin:0 auto;padding:20px}
+
+  /* topbar */
+  header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 0}
+  .brand{display:flex;gap:12px;align-items:center}
+  .brand img{height:62px;width:auto;border-radius:10px;box-shadow:var(--shadow)}
+  .brand .logo-fallback{width:64px;height:64px;display:grid;place-items:center;border-radius:12px;background:linear-gradient(135deg,var(--az1),var(--az2));color:#fff;font-weight:800;box-shadow:var(--shadow)}
+  .brand-title{font-family:'Montserrat';font-weight:800;color:var(--az2);font-size:1.05rem}
+  nav{display:flex;gap:10px;align-items:center}
+  a.nav{color:var(--muted);text-decoration:none;padding:8px 12px;border-radius:10px}
+  a.nav:hover{background:var(--glass);color:var(--text)}
+
+  .theme-toggle{display:inline-flex;align-items:center;gap:8px;padding:6px;border-radius:999px;background:var(--card);cursor:pointer;box-shadow:var(--shadow)}
+  .btn-primary{background:linear-gradient(90deg,var(--az1),var(--az2));color:#fff;border:none;padding:10px 16px;border-radius:12px;font-weight:800;cursor:pointer;box-shadow:0 10px 22px rgba(26,115,232,0.12)}
+  .btn-ghost{background:transparent;border:2px solid rgba(0,0,0,0.04);padding:8px 12px;border-radius:10px;cursor:pointer}
+
+  /* hero */
+  .hero{display:grid;grid-template-columns:1fr 420px;gap:22px;align-items:center;margin-top:6px}
+  .hero h1{font-family:'Montserrat';font-size:2.2rem;margin:0 0 10px;line-height:1.02}
+  .hero p{color:var(--muted);margin:0 0 14px;font-size:1rem}
+  .hero .ctas{display:flex;gap:10px}
+  .hero-right{display:flex;align-items:center;justify-content:center;padding:18px;border-radius:16px;background:linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0));box-shadow:var(--shadow)}
+
+  /* sections */
+  section{margin-top:20px;padding:18px;border-radius:14px;background:var(--card);box-shadow:var(--shadow)}
+  section h2{font-family:'Montserrat';color:var(--az2);margin-bottom:10px}
+
+  /* who we are cards */
+  .team{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+  .member{background:var(--card);padding:18px;border-radius:12px;display:flex;gap:16px;align-items:center;box-shadow:0 8px 20px rgba(10,20,40,0.04)}
+  .avatar{width:60px;height:60px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700}
+  .avatar.blue{background:linear-gradient(180deg,var(--az1),var(--az2))}
+  .avatar.green{background:linear-gradient(180deg,#10b981,#34d399)}
+  .avatar.purple{background:linear-gradient(180deg,#8b5cf6,#c084fc)}
+  .avatar.red{background:linear-gradient(180deg,#ef4444,#f97316)}
+  .member .name{font-weight:800}
+  .member .role{color:var(--muted);font-size:0.95rem}
+
+  /* offerings grid */
+  .offer-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+  .offer{padding:12px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);box-shadow:var(--shadow)}
+  .offer h4{margin:6px 0;color:var(--text)}
+
+  /* map */
+  .map-wrap{padding:20px;border-radius:12px;background:linear-gradient(180deg,rgba(250,250,255,0.6),transparent);text-align:center}
+  .map-card{margin:14px auto;padding:22px;border-radius:12px;max-width:760px;background:var(--card);box-shadow:var(--shadow)}
+
+  /* plans */
+  .plans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .plan{padding:16px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);position:relative;overflow:visible;cursor:pointer;transition:transform .26s}
+  .plan:hover{transform:translateY(-8px);box-shadow:0 22px 46px rgba(10,30,80,0.08)}
+  .plan .tag{position:absolute;top:-12px;left:14px;background:var(--az2);color:#fff;padding:8px 10px;border-radius:10px;font-weight:800}
+  .plan .price{position:absolute;top:-12px;right:14px;background:var(--acc);color:#fff;padding:8px 10px;border-radius:10px;font-weight:800}
+  .features{list-style:none;padding:0;margin:0}
+  .features li{display:flex;gap:10px;align-items:flex-start;color:var(--muted);padding:8px 0}
+  .dot{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;color:white;font-weight:800;background:linear-gradient(90deg,var(--az1),var(--az2))}
+
+  /* chat */
+  .chat-wrap{display:flex;gap:14px;align-items:flex-start}
+  .chat-panel{flex:1;border-radius:12px;padding:12px;background:var(--card);box-shadow:var(--shadow)}
+  .chat-window{height:240px;overflow:auto;border-radius:8px;padding:10px;border:1px solid rgba(0,0,0,0.04);background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent)}
+  .msg{padding:8px 10px;border-radius:10px;margin:8px 0;max-width:86%}
+  .msg.user{background:linear-gradient(90deg,var(--az1),var(--az2));color:#fff;margin-left:auto}
+  .msg.bot{background:linear-gradient(180deg,rgba(240,240,255,0.9),transparent);color:var(--text)}
+  .chat-controls{display:flex;gap:8px;margin-top:10px}
+  input[type="text"],input[type="email"],textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(0,0,0,0.06);background:transparent;color:var(--text)}
+  textarea{min-height:120px;resize:vertical}
+
+  /* contact */
+  .contact-grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+  .aside-card{padding:12px;border-radius:10px;background:linear-gradient(180deg,rgba(255,255,255,0.02),transparent);box-shadow:var(--shadow)}
+
+  footer{padding:22px;text-align:center;color:var(--muted);font-size:0.9rem;margin-top:18px}
+
+  /* responsive */
+  @media (max-width:980px){
+    .hero{grid-template-columns:1fr; text-align:center}
+    .hero-right{order:-1}
+    .contact-grid{grid-template-columns:1fr}
+    .map-card{margin:12px}
+  }
+
+  /* reveal */
+  .reveal{opacity:0;transform:translateY(18px);transition:all .6s ease}
+  .reveal.visible{opacity:1;transform:none}
+</style>
+</head>
+<body>
+
+<div class="container" role="document">
+  <!-- HEADER -->
+  <header>
+    <div class="brand" aria-hidden="false">
+      <!-- intent: try to load external logo; fallback to inline graphic (SVG-like block) -->
+      <img id="logoImg" src="AulaPro.png" alt="AulaPro logo (si no aparece, se muestra el icono)" onerror="this.style.display='none';document.getElementById('logoFallback').style.display='grid'">
+      <div id="logoFallback" class="logo-fallback" style="display:none">
+        <!-- simple vector-ish glyph -->
+        <svg width="42" height="42" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 12c0 4.418 3.582 8 8 8s8-3.582 8-8-3.582-8-8-8" stroke="#fff" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="9.5" cy="10.5" r="1.6" fill="#fff"/>
+          <circle cx="14.5" cy="10.5" r="1.6" fill="#fff"/>
+        </svg>
+      </div>
+      <div>
+        <div class="brand-title">AULAPRO</div>
+        <div style="color:var(--muted);font-size:0.9rem">Profesionales · Inteligencia Artificial</div>
+      </div>
+    </div>
+
+    <nav>
+      <a class="nav" href="#inicio">Inicio</a>
+      <a class="nav" href="#quienes">Quiénes somos</a>
+      <a class="nav" href="#planes">Planes</a>
+      <a class="nav" href="#contacto">Contacto</a>
+
+      <div class="theme-toggle" id="themeToggle" title="Cambiar modo">
+        <svg width="16" height="16" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+        <small style="color:var(--muted)">Tema</small>
+      </div>
+
+      <button class="btn-primary" id="explorePlans">Explorar Planes</button>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <main id="inicio" class="hero" aria-labelledby="titleHero">
+    <div>
+      <h1 id="titleHero">Aprende. Comparte. Crea. Evoluciona con AulaPro.</h1>
+      <p>Plataforma digital educativa que busca cerrar la brecha en el acceso a la educación tecnológica. Cursos, tutorías, IA y comunidad para estudiantes, docentes y profesionales.</p>
+      <div class="ctas">
+        <button class="btn-primary" id="empiezaGratis">Empieza gratis</button>
+        <button class="btn-ghost" id="verDemo">Ver demo</button>
+      </div>
+    </div>
+
+    <div class="hero-right" aria-hidden="true">
+      <!-- Si tienes AulaPro.png en la carpeta, el <img> lo mostrará; si no, el SVG fallback aparece arriba en header -->
+      <img src="AulaPro.png" alt="AulaPro logo grande" style="max-width:100%;border-radius:10px" onerror="this.style.display='none'">
+    </div>
+  </main>
+
+  <!-- QUIÉNES SOMOS -->
+  <section id="quienes" class="reveal">
+    <h2>Quiénes somos</h2>
+    <p style="color:var(--muted)">AulaPro fue creada por un grupo de jóvenes emprendedores con la meta de transformar la educación digital. El equipo combina conocimiento técnico y visión educativa para impulsar una comunidad de aprendizaje digital.</p>
+
+    <div class="team" style="margin-top:14px">
+      <div class="member">
+        <div class="avatar blue">KA</div>
+        <div>
+          <div class="name">Karol Arboleda</div>
+          <div class="role">CEO y Directora General</div>
+        </div>
+      </div>
+
+      <div class="member">
+        <div class="avatar green">AV</div>
+        <div>
+          <div class="name">Adrián Valencia</div>
+          <div class="role">Director de Desarrollo Tecnológico</div>
+        </div>
+      </div>
+
+      <div class="member">
+        <div class="avatar purple">GV</div>
+        <div>
+          <div class="name">Gisell Velasco</div>
+          <div class="role">Directora de Comunicación y Contenido</div>
+        </div>
+      </div>
+
+      <div class="member">
+        <div class="avatar red">FG</div>
+        <div>
+          <div class="name">Franco Guadil</div>
+          <div class="role">Coordinador de Ciberseguridad y Soporte</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MAPA ANIMADO -->
+  <section class="map-wrap reveal">
+    <h2>Mapa interactivo - Impacto en Latinoamérica</h2>
+    <p style="color:var(--muted)">AulaPro conecta mentes en toda Latinoamérica. Puntos activos se encienden al hacer scroll, mostrando impacto en países clave.</p>
+
+    <div class="map-card" aria-hidden="false">
+      <!-- Simple SVG map-like shape with points -- animated via JS -->
+      <svg id="mapSVG" width="100%" height="300" viewBox="0 0 1000 400" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+        </defs>
+
+        <!-- background stylized -->
+        <rect x="0" y="0" width="1000" height="400" rx="20" fill="#EAF6FF"/>
+
+        <!-- curved 'continent' area -->
+        <path d="M40 300 Q180 120 340 240 T700 200 T940 260 L940 360 L40 360 Z" fill="#DFF4FF" stroke="#BEEAFF" stroke-width="3"/>
+
+        <!-- Points (countries) -->
+        <g id="points">
+          <g class="pt" data-name="Mexico" transform="translate(360,120)">
+            <circle r="8" fill="#bcdfff" stroke="#1A73E8" stroke-width="2"></circle>
+            <text x="14" y="6" font-size="12" fill="#053047">México</text>
+          </g>
+
+          <g class="pt" data-name="Colombia" transform="translate(400,200)">
+            <circle r="8" fill="#bcdfff" stroke="#1A73E8" stroke-width="2"></circle>
+            <text x="14" y="6" font-size="12" fill="#053047">Colombia</text>
+          </g>
+
+          <g class="pt" data-name="Peru" transform="translate(310,260)">
+            <circle r="8" fill="#bcdfff" stroke="#1A73E8" stroke-width="2"></circle>
+            <text x="14" y="6" font-size="12" fill="#053047">Perú</text>
+          </g>
+
+          <g class="pt" data-name="Argentina" transform="translate(640,280)">
+            <circle r="8" fill="#bcdfff" stroke="#1A73E8" stroke-width="2"></circle>
+            <text x="14" y="6" font-size="12" fill="#053047">Argentina</text>
+          </g>
+
+          <g class="pt" data-name="Chile" transform="translate(780,300)">
+            <circle r="8" fill="#bcdfff" stroke="#1A73E8" stroke-width="2"></circle>
+            <text x="14" y="6" font-size="12" fill="#053047">Chile</text>
+          </g>
+        </g>
+      </svg>
+      <p style="color:var(--muted);margin-top:12px">Mapa interactivo: puntos se encienden al hacer scroll, mostrando impacto en Latinoamérica.</p>
+    </div>
+  </section>
+
+  <!-- QUÉ OFRECEMOS -->
+  <section class="reveal">
+    <h2>Qué ofrecemos</h2>
+    <div class="offer-grid">
+      <div class="offer">
+        <h4>📚 Cursos virtuales</h4>
+        <div style="color:var(--muted)">En informática, ciberseguridad y tecnología.</div>
+      </div>
+      <div class="offer">
+        <h4>👩‍🏫 Acompañamiento docente</h4>
+        <div style="color:var(--muted)">Con tutores certificados.</div>
+      </div>
+      <div class="offer">
+        <h4>🤖 Inteligencia artificial</h4>
+        <div style="color:var(--muted)">Que responde dudas y guía el aprendizaje.</div>
+      </div>
+      <div class="offer">
+        <h4>💬 Foros y chats</h4>
+        <div style="color:var(--muted)">Colaborativos.</div>
+      </div>
+      <div class="offer">
+        <h4>🔐 Membresías</h4>
+        <div style="color:var(--muted)">Gratuitas y de pago con beneficios exclusivos.</div>
+      </div>
+      <div class="offer">
+        <h4>📜 Certificados digitales</h4>
+        <div style="color:var(--muted)">Y proyectos prácticos.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CHAT CON IA (SIMULADO) -->
+  <section class="reveal">
+    <h2>Chat con Inteligencia Artificial</h2>
+    <div class="chat-wrap">
+      <div class="chat-panel" style="flex:1">
+        <div style="font-weight:800;margin-bottom:8px">¡Hola! Soy el asistente IA de AulaPro.</div>
+        <div class="chat-window" id="chatWindow" aria-live="polite" role="log">
+          <div class="msg bot">¡Hola! ¿En qué puedo ayudarte hoy con tu código o proyecto?</div>
+        </div>
+
+        <div style="display:flex;gap:8px;margin-top:10px">
+          <input id="chatInput" type="text" placeholder="Escribe tu pregunta a la IA..." aria-label="Mensaje a IA">
+          <button class="btn-primary" id="sendChat">Enviar</button>
+        </div>
+      </div>
+
+      <div class="aside-card" style="width:320px">
+        <h4 style="margin-top:0">¿Qué puedes preguntar?</h4>
+        <ul style="color:var(--muted)">
+          <li>• Dudas sobre ciberseguridad</li>
+          <li>• Revisión básica de código</li>
+          <li>• Ideas para proyectos prácticos</li>
+        </ul>
+        <div style="margin-top:12px;color:var(--muted);font-size:0.95rem">
+          * Chat simulado: respuestas automáticas demostrativas.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- OBJETIVOS Y ANÁLISIS -->
+  <section class="reveal">
+    <h2>Objetivo General y Específicos</h2>
+    <p><strong>Objetivo general:</strong> Desarrollar una plataforma colaborativa que facilite el aprendizaje práctico de informática y ciberseguridad para estudiantes y profesionales, integrando inteligencia artificial y orientación experta.</p>
+
+    <h4 style="margin-top:10px">Objetivos específicos</h4>
+    <ul style="color:var(--muted)">
+      <li>• Implementar un sistema de autenticación seguro con contraseñas personalizadas que proteja los proyectos de los usuarios frente a posibles ciberataques.</li>
+      <li>• Diseñar estrategias de aprendizaje interactivas que permitan desarrollar habilidades técnicas en forma práctica.</li>
+      <li>• Integrar herramientas de inteligencia artificial como apoyo en la creación, revisión y mejora de código.</li>
+    </ul>
+
+    <h4 style="margin-top:12px">Análisis del mercado</h4>
+    <p style="color:var(--muted)">El sector EdTech está en crecimiento constante. AulaPro se posiciona como una alternativa sostenible, centrada en la calidad educativa y el acompañamiento humano reforzado con IA.</p>
+  </section>
+
+  <!-- PLANES -->
+  <section id="planes" class="reveal">
+    <h2>Planes y membresías (/mes)</h2>
+    <div class="plans-grid" role="list">
+      <article class="plan" tabindex="0" role="listitem" aria-labelledby="freeTitle">
+        <div class="tag">Gratis</div>
+        <div class="price">$0</div>
+        <h3 id="freeTitle">Plan Básico</h3>
+        <p style="color:var(--muted)">Comienza a aprender sin costo.</p>
+        <ul class="features">
+          <li><span class="dot">✓</span> Cursos básicos</li>
+          <li><span class="dot">✓</span> Acceso a foros</li>
+          <li><span class="dot">✓</span> Comunidad</li>
+        </ul>
+        <div style="margin-top:10px"><button class="btn-ghost" onclick="selectPlan('Gratis')">Elegir</button></div>
+      </article>
+
+      <article class="plan" tabindex="0" role="listitem" aria-labelledby="proTitle">
+        <div class="tag">PRO</div>
+        <div class="price">$19,99</div>
+        <h3 id="proTitle">Plan Pro</h3>
+        <p style="color:var(--muted)">Para avanzar más rápido.</p>
+        <ul class="features">
+          <li><span class="dot">✓</span> Todos los cursos</li>
+          <li><span class="dot">✓</span> Tutorías</li>
+          <li><span class="dot">✓</span> Proyectos avanzados</li>
+        </ul>
+        <div style="margin-top:10px"><button class="btn-ghost" onclick="selectPlan('Pro')">Elegir</button></div>
+      </article>
+
+      <article class="plan" tabindex="0" role="listitem" aria-labelledby="premTitle">
+        <div class="tag">Premium</div>
+        <div class="price">$49,99</div>
+        <h3 id="premTitle">Plan Premium</h3>
+        <p style="color:var(--muted)">Soporte prioritario y certificaciones.</p>
+        <ul class="features">
+          <li><span class="dot">✓</span> Contenido exclusivo</li>
+          <li><span class="dot">✓</span> Certificaciones</li>
+          <li><span class="dot">✓</span> Soporte prioritario</li>
+        </ul>
+        <div style="margin-top:10px"><button class="btn-ghost" onclick="selectPlan('Premium')">Elegir</button></div>
+      </article>
+
+      <article class="plan" tabindex="0" role="listitem" aria-labelledby="groupTitle">
+        <div class="tag">Grupal (4)</div>
+        <div class="price">$139,99</div>
+        <h3 id="groupTitle">Plan Grupal</h3>
+        <p style="color:var(--muted)">Perfecto para equipos y clases en grupo.</p>
+        <ul class="features">
+          <li><span class="dot">✓</span> Todo Premium para 4</li>
+          <li><span class="dot">✓</span> Proyectos colaborativos</li>
+          <li><span class="dot">✓</span> Descuento grupal</li>
+        </ul>
+        <div style="margin-top:10px"><button class="btn-ghost" onclick="selectPlan('Grupal')">Elegir</button></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- CONTACTO -->
+  <section id="contacto" class="reveal">
+    <h2>Contacto / Únete</h2>
+    <div class="contact-grid">
+      <div>
+        <p style="color:var(--muted)">¿Tienes preguntas o quieres unirte a nuestra comunidad? Completa el formulario y nos pondremos en contacto contigo.</p>
+        <div style="margin-top:10px">
+          <label for="ctname" style="font-weight:700;color:var(--muted)">Nombre</label>
+          <input id="ctname" type="text" placeholder="Tu nombre">
+        </div>
+
+        <div style="margin-top:10px">
+          <label for="ctemail" style="font-weight:700;color:var(--muted)">Correo</label>
+          <input id="ctemail" type="email" placeholder="tu@correo.com">
+        </div>
+
+        <div style="margin-top:10px">
+          <label for="ctmsg" style="font-weight:700;color:var(--muted)">Mensaje</label>
+          <textarea id="ctmsg" placeholder="Cuéntanos en qué te podemos ayudar..."></textarea>
+        </div>
+
+        <div style="margin-top:10px;display:flex;gap:10px;align-items:center">
+          <button class="btn-primary" id="sendContact">Enviar mensaje</button>
+          <div style="color:var(--muted)">O escríbenos a <strong style="color:var(--az2)">contacto@aulapro4.com</strong></div>
+        </div>
+      </div>
+
+      <aside class="aside-card">
+        <h4 style="margin-top:0">Nuestra comunidad</h4>
+        <p style="color:var(--muted)">Síguenos en redes y únete a los grupos de estudio.</p>
+        <p style="margin-top:12px;font-weight:700;color:var(--az2)">TikTok · Instagram</p>
+        <p style="color:var(--muted);margin-top:12px">Tel: <strong>3225262587</strong></p>
+      </aside>
+    </div>
+  </section>
+
+  <footer>
+    <div>© <span id="yr"></span> AulaPro. Todos los derechos reservados.</div>
+    <div style="color:var(--muted)">Hecho con DU nerd.lat · Porque aprender juntos siempre será mejor.</div>
+  </footer>
+</div>
+
+<script>
+  // fecha footer
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  // tema
+  (function initTheme(){
+    const saved = localStorage.getItem('ap_theme');
+    const pref = saved || (window.matchMedia && window.matchMedia('(prefers-color-scheme:dark)').matches ? 'dark':'light');
+    if(pref === 'dark') document.documentElement.setAttribute('data-theme','dark');
+  })();
+  document.getElementById('themeToggle').onclick = () => {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    if(isDark){ document.documentElement.removeAttribute('data-theme'); localStorage.setItem('ap_theme','light') }
+    else{ document.documentElement.setAttribute('data-theme','dark'); localStorage.setItem('ap_theme','dark') }
+  };
+
+  // reveal on scroll
+  function reveal() {
+    document.querySelectorAll('.reveal').forEach(el=>{
+      const r = el.getBoundingClientRect();
+      if(r.top < window.innerHeight * 0.85) el.classList.add('visible');
+    });
+  }
+  window.addEventListener('scroll', reveal);
+  reveal();
+
+  // mapa: glow points when in viewport
+  function mapActivate(){
+    const svg = document.getElementById('mapSVG');
+    if(!svg) return;
+    const r = svg.getBoundingClientRect();
+    if(r.top < window.innerHeight * 0.9){
+      const pts = svg.querySelectorAll('.pt circle');
+      pts.forEach((c,i)=>{
+        setTimeout(()=> {
+          c.setAttribute('fill', '#1A73E8');
+          c.setAttribute('r','12');
+          c.style.filter = 'url(#glow)';
+        }, i*220);
+      });
+      window.removeEventListener('scroll', mapActivate);
+    }
+  }
+  window.addEventListener('scroll', mapActivate);
+  mapActivate();
+
+  // plans -> open contact and prefill
+  function selectPlan(plan){
+    document.getElementById('ctname').focus();
+    document.getElementById('ctmsg').value = `Hola, me interesa el plan: ${plan}. Quisiera más información sobre inscripciones y beneficios.`;
+    document.getElementById('contacto').scrollIntoView({behavior:'smooth'});
+  }
+  window.selectPlan = selectPlan;
+
+  // explore plans button
+  document.getElementById('explorePlans').addEventListener('click', e=>{
+    document.getElementById('planes').scrollIntoView({behavior:'smooth'});
+  });
+  document.getElementById('empiezaGratis').addEventListener('click', ()=> selectPlan('Gratis'));
+
+  // chat: simulated bot responses
+  const chatWin = document.getElementById('chatWindow');
+  document.getElementById('sendChat').addEventListener('click', sendChat);
+  document.getElementById('chatInput').addEventListener('keydown', (e)=>{ if(e.key === 'Enter') sendChat(); });
+
+  function sendChat(){
+    const input = document.getElementById('chatInput');
+    const txt = (input.value || '').trim();
+    if(!txt) return;
+    appendMsg('user', txt);
+    input.value = '';
+    // simulated answer
+    setTimeout(() => {
+      const answer = simulateAnswer(txt);
+      appendMsg('bot', answer);
+      chatWin.scrollTop = chatWin.scrollHeight;
+    }, 700 + Math.random()*800);
+  }
+  function appendMsg(who, text){
+    const d = document.createElement('div');
+    d.className = 'msg ' + (who === 'user' ? 'user' : 'bot');
+    d.textContent = text;
+    chatWin.appendChild(d);
+  }
+  function simulateAnswer(q){
+    q = q.toLowerCase();
+    if(q.includes('ciber')||q.includes('segur')) return 'Puedes empezar revisando control de acceso, actualizaciones y contraseñas seguras. ¿Quieres una guía paso a paso?';
+    if(q.includes('codigo')||q.includes('error')) return 'Pega aquí el fragmento de código y te doy feedback (simulado).';
+    if(q.includes('proyecto')) return '¡Genial! Define alcance, tecnologías y un calendario. ¿Quieres una plantilla de proyecto?';
+    return 'Interesante pregunta. Como asistente de demostración, puedo sugerir recursos, pasos y buenas prácticas. ¿Quieres que te recomiende cursos?';
+  }
+
+  // contact send (simulado)
+  document.getElementById('sendContact').addEventListener('click', function(){
+    const n = document.getElementById('ctname').value.trim();
+    const e = document.getElementById('ctemail').value.trim();
+    const m = document.getElementById('ctmsg').value.trim();
+    if(!n||!e||!m){ alert('Por favor completa nombre, correo y mensaje.'); return; }
+    const re = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
+    if(!re.test(e)){ alert('Ingresa un correo válido.'); return; }
+    this.disabled = true; this.textContent = 'Enviando...';
+    setTimeout(()=> {
+      alert('¡Mensaje enviado! Gracias por contactarnos. Nos comunicaremos pronto.');
+      document.getElementById('ctname').value=''; document.getElementById('ctemail').value=''; document.getElementById('ctmsg').value='';
+      this.disabled=false; this.textContent='Enviar mensaje';
+    },900);
+  });
+
+  // show logo fallback if image fails (in case image exists but loads late)
+  window.addEventListener('load', ()=>{
+    const img = document.getElementById('logoImg');
+    if(img && img.complete && img.naturalWidth === 0){
+      img.style.display='none'; document.getElementById('logoFallback').style.display='grid';
+    }
+  });
+</script>
+</body>
+</html>
